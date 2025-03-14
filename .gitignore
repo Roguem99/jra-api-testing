@@ -27,4 +27,4 @@ replay_pid*
 /.idea
 
 # maven build folders
-./api-testing/target
+api-testing/target
