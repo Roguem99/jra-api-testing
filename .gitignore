@@ -25,3 +25,6 @@ replay_pid*
 
 # IntelliJ IDE folders
 /.idea
+
+# maven build folders
+api-testing/target
