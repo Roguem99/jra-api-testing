@@ -6,12 +6,13 @@ import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
 public class ApiPracticeTest {
+    private final String baseURI = "https://apichallenges.eviltester.com/sim/entities";
 
     @Test
     public void testCheckEnt() {
         given()
             .when()
-                .get("https://apichallenges.eviltester.com/sim/entities")
+                .get(baseURI)
             .then()
                 .statusCode(200);
     }
@@ -20,7 +21,7 @@ public class ApiPracticeTest {
     public void testCheckEntOne() {
         given()
             .when()
-                .get("https://apichallenges.eviltester.com/sim/entities/1")
+                .get(baseURI+"/1")
             .then()
                 .body("id", equalTo(1))
             .and()
@@ -33,7 +34,7 @@ public class ApiPracticeTest {
     public void testCheckEntTen() {
         given()
             .when()
-                .get("https://apichallenges.eviltester.com/sim/entities/10")
+                .get(baseURI+"/10")
             .then()
                 .body("id", equalTo(10))
             .and()
@@ -49,7 +50,7 @@ public class ApiPracticeTest {
 
         given().queryParam(requestBody);
         when()
-            .post("https://apichallenges.eviltester.com/sim/entities/10")
+            .post(baseURI+"/10")
         .then()
             .statusCode(200)
         .and()
@@ -63,7 +64,7 @@ public class ApiPracticeTest {
 
         given().queryParam(requestParams.toString());
         when()
-            .post("https://apichallenges.eviltester.com/sim/entities/10")
+            .post(baseURI+"/10")
         .then()
             .statusCode(200)
         .and()
@@ -77,7 +78,7 @@ public class ApiPracticeTest {
 
         given().queryParam(requestParams.toString());
         when()
-            .post("https://apichallenges.eviltester.com/sim/entities/10")
+            .post(baseURI+"/10")
         .then()
             .statusCode(200)
         .and()
@@ -88,22 +89,33 @@ public class ApiPracticeTest {
     public void testDelete() {
         given().
         when()
-            .get("https://apichallenges.eviltester.com/sim/entities/9")
+            .delete(baseURI+"/9")
         .then()
-            .statusCode(404)
-        .and()
-            .body("errorMessages", hasItem("Could not find Entity with ID 9"));
+            .statusCode(204);
     };
 
     @Test
     public void testGetAfterDelete() {
         given().
             when()
-                .get("https://apichallenges.eviltester.com/sim/entities/9")
+                .get(baseURI+"/9")
             .then()
                 .statusCode(404)
             .and()
                 .body("errorMessages", hasItem("Could not find Entity with ID 9"));
     };
 
+    @Test
+    public void testDeleteWhenUnable() {
+        int[] userIds = {1,2,3,4,5,6,7,8,10};
+        for (int userId : userIds) {
+            given().
+                when()
+                    .delete(baseURI +"/"+ userId)
+                .then()
+                    .statusCode(403)
+                .and()
+                    .body("errorMessages", hasItem("Not authorised to delete that entity"));
+        }
+    };
 }
