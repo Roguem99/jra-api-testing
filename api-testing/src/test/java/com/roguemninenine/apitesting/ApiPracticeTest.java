@@ -1,8 +1,10 @@
 package com.roguemninenine.apitesting;
 
+import io.restassured.response.Response;
 import org.json.JSONObject;
 import org.junit.Test;
 import static io.restassured.RestAssured.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 public class ApiPracticeTest {
@@ -88,10 +90,10 @@ public class ApiPracticeTest {
     @Test
     public void testDelete() {
         given().
-        when()
-            .delete(baseURI+"/9")
-        .then()
-            .statusCode(204);
+            when()
+                .delete(baseURI+"/9")
+            .then()
+                .statusCode(204);
     };
 
     @Test
@@ -118,4 +120,26 @@ public class ApiPracticeTest {
                     .body("errorMessages", hasItem("Not authorised to delete that entity"));
         }
     };
+
+    @Test
+    public void testDeleteNonExistent() {
+        int userId = 88;
+        given().
+            when()
+                .delete(baseURI+"/"+userId)
+            .then()
+                .statusCode(404)
+                .and()
+                .body("errorMessages", hasItem("Could not find Entity with ID "+userId));
+    };
+
+    @Test
+    public void testOptionsOnBaseURI() {
+        Response response = given().when().options(baseURI);
+        response.then()
+                .statusCode(204);
+        String headerValue = response.getHeader("Allow");
+        assertThat(headerValue, is("GET, POST, PUT, HEAD, OPTIONS"));
+    };
+
 }
