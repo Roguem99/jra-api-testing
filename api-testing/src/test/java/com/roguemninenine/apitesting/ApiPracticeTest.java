@@ -163,4 +163,17 @@ public class ApiPracticeTest {
                 .statusCode(200);
     }
 
+    @Test
+    public void testIncorrectEndpointError() {
+        String shortURI = "https://apichallenges.eviltester.com/sim/nogo";
+        String[] invalidEndpoints = {"","nogo", "admin","user"};
+        for (String endpoint: invalidEndpoints) {
+            given().
+                    when()
+                    .delete(shortURI + endpoint)
+                    .then()
+                    .statusCode(404);
+        }
+    }
+
 }
