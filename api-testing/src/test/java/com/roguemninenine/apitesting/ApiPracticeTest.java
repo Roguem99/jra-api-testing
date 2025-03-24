@@ -57,7 +57,7 @@ public class ApiPracticeTest {
             .statusCode(200)
         .and()
             .body("name", equalTo("eris"));
-    };
+    }
 
     @Test
     public void testPostAmendEntJSONObjReqBody() {
@@ -71,7 +71,7 @@ public class ApiPracticeTest {
             .statusCode(200)
         .and()
             .body("name", equalTo("eris"));
-    };
+    }
 
     @Test
     public void testPutAmendEntJSONObjReqBody() {
@@ -85,7 +85,7 @@ public class ApiPracticeTest {
             .statusCode(200)
         .and()
             .body("name", equalTo("eris"));
-    };
+    }
 
     @Test
     public void testDelete() {
@@ -94,7 +94,7 @@ public class ApiPracticeTest {
                 .delete(baseURI+"/9")
             .then()
                 .statusCode(204);
-    };
+    }
 
     @Test
     public void testGetAfterDelete() {
@@ -105,7 +105,7 @@ public class ApiPracticeTest {
                 .statusCode(404)
             .and()
                 .body("errorMessages", hasItem("Could not find Entity with ID 9"));
-    };
+    }
 
     @Test
     public void testDeleteWhenUnable() {
@@ -119,7 +119,7 @@ public class ApiPracticeTest {
                 .and()
                     .body("errorMessages", hasItem("Not authorised to delete that entity"));
         }
-    };
+    }
 
     @Test
     public void testDeleteNonExistent() {
@@ -131,7 +131,7 @@ public class ApiPracticeTest {
                 .statusCode(404)
                 .and()
                 .body("errorMessages", hasItem("Could not find Entity with ID "+userId));
-    };
+    }
 
     @Test
     public void testOptionsOnBaseURI() {
@@ -140,6 +140,27 @@ public class ApiPracticeTest {
                 .statusCode(204);
         String headerValue = response.getHeader("Allow");
         assertThat(headerValue, is("GET, POST, PUT, HEAD, OPTIONS"));
-    };
+    }
+
+    @Test
+    public void testNegativeDelete() {
+        Response response = given().when().delete(baseURI);
+        response.then()
+                .statusCode(405);
+    }
+
+    @Test
+    public void testNegativePatch() {
+        Response response = given().when().patch(baseURI);
+        response.then()
+                .statusCode(501);
+    }
+
+    @Test
+    public void testBaseHead() {
+        Response response = given().when().head(baseURI);
+        response.then()
+                .statusCode(200);
+    }
 
 }
