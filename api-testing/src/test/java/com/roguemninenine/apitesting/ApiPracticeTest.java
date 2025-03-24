@@ -7,6 +7,13 @@ import static io.restassured.RestAssured.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
+/**
+ * This is based off of EvilTesters practice APIs challenge site. They are
+ * created from scratch and do not mimic the example the challenge site
+ * provided.
+ * Simply a basic exercise.
+ * url: <a href="https://apichallenges.eviltester.com/practice-modes/simulation">...</a>
+ */
 public class ApiPracticeTest {
     private final String baseURI = "https://apichallenges.eviltester.com/sim/entities";
 
